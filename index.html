@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="exchange-box"> <!-- this is for the dropdown menu-->
+        <div class="dropdown">
+            <button class="dropbtn" id="from-button">Choose a Currency</button>
+            <div class="dropdown-content" id="from-currency-list"> <!--different id for each purposes of the buttons-->
+                <a href="#">USD</a>
+                <a href="#">KRW</a>
+                <a href="#">GBP</a>
+            </div>
+        </div>
+        <div>
+            <input type="number" id="from-input" onkeyup="convert()"/>
+            <div>dollar</div>
+        </div>
+    </div>
+    <h1 style="text-align:center">=</h1>
+    <div class="exchange-box"> <!-- this is for the dropdown menu-->
+        <div class="dropdown">
+            <button class="dropbtn" id="to-button">Choose Another</button>
+            <div class="dropdown-content" id="to-currency-list">
+                <a href="#">USD</a>
+                <a href="#">KRW</a>
+                <a href="#">GBP</a>
+            </div>
+        </div>
+        <div>
+            <input type="number" id="to-input"/>
+            <div>dollar</div>
+        </div>
+    </div>
+
+
+
+    <script src="main.js"></script>
+</body>
+</html>
