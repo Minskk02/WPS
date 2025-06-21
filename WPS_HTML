@@ -1,0 +1,128 @@
+// this code requires Live scripting on web
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://127.0.0.1:5500/WPS.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WPS Reader</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      padding: 2em;
+    }
+    #word {
+      font-size: 48px;
+      margin: 2em 0;
+      color: #222;
+    }
+    input[type="text"] {
+      padding: 0.5em;
+      font-size: 18px;
+      width: 80%;
+      max-width: 600px;
+    }
+    button {
+      padding: 0.5em 1em;
+      font-size: 16px;
+      margin-top: 1em;
+      background-color: #157641;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>WPS Reader</h1>
+  <input type="text" id="inputText" placeholder="Paste your sentence here...">
+  <br>
+  <button onclick="startWPS()">Start WPS</button>
+  <div id="word"></div>
+
+  <script>
+    let words = [];
+    let index = 0;
+
+    function getDelay(word) {
+      let base = word.length <= 3 ? 220 :
+                 word.length <= 8 ? 260 :
+                 word.length <= 10 ? 320 : 750;
+      if (/[.,!?]$/.test(word)) base += 300; // Add pause for punctuation
+      return base;
+    }
+
+    function showNextWord() {
+      if (index < words.length) {
+        const word = words[index];
+        document.getElementById('word').textContent = word;
+        index++;
+        setTimeout(showNextWord, getDelay(word));
+      } else {
+        document.getElementById('word').textContent = '';
+      }
+    }
+
+    function startWPS() {
+      let sentence = document.getElementById('inputText').value.trim();
+      if (!sentence) {
+        document.getElementById('word').textContent = '⚠️ Please enter a sentence.';
+        return;
+      }
+
+      const wordPairs = ["in the", "at all", "you know", "going to", "sort of"];
+      for (const phrase of wordPairs) {
+        const regex = new RegExp(`\\b${phrase}\\b`, 'gi');
+        sentence = sentence.replace(regex, phrase.replace(" ", "_"));
+      }
+
+      words = sentence.split(/\s+/).map(w => w.replace("_", " "));
+      index = 0;
+      showNextWord();
+    }
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>
